@@ -4,7 +4,7 @@ import type { TaskInterface } from './TaskInterface'
 function TaskComponent({task, completeTask, startTask}: {task: TaskInterface, completeTask: any, startTask: any}) {
 
     function taskButton() {
-        if(task.status === "in progress"){
+        if(task.task_status === "in progress"){
             completeTask(task);
         }else{
             startTask(task);
@@ -13,17 +13,15 @@ function TaskComponent({task, completeTask, startTask}: {task: TaskInterface, co
 
   return (
     <>
-        {task.status === "completed" ? 
+        {task.task_status === "completed" ? 
             <></> 
             :
             <>
-                <h1>{task.name}</h1>
-                <p>{task.description}</p>
-                <h3>{task.reward}</h3>
-                <h4>{task.id}</h4>
-                <h4>{task.difficulty}</h4>
-                <h4>{task.status}</h4>
-                <button onClick={taskButton}>{task.status === "not started" ? "Start" : "Complete"}</button>
+                <h1>{task.task_name}</h1>
+                <p>{task.task_description}</p>
+                <h3>{task.task_exp}</h3>
+                <h4>{task.task_status}</h4>
+                <button onClick={taskButton}>{task.task_status === "not started" ? "Start" : "Complete"}</button>
             </>
         }
     </>

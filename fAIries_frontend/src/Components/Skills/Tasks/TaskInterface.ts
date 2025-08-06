@@ -1,9 +1,7 @@
 export interface TaskInterface{
-    id: string;
-    name: string;
-    description: string;
-    reward: number;
-    difficulty: string;
-    status: string;
+    task_name: string;
+    task_description: string;
+    task_exp: number;
+    task_status: string;
 }
 

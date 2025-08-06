@@ -11,25 +11,25 @@ function SkillComponent({skill, viewTask=true}: {skill:SkillInterface, viewTask?
 
     let [skillState, setSkillState] = useState<SkillInterface>(skill);
 
-    let tasksView = skill.tasks.map((item: TaskInterface) => {
-                    return item.status === "completed" ? <></> : <TaskComponent task={item} completeTask={completeTask} startTask={startTask}/>
+    let tasksView = skill.skill_tasks.map((item: TaskInterface) => {
+                    return item.task_status === "completed" ? <></> : <TaskComponent task={item} completeTask={completeTask} startTask={startTask}/>
                 })
     
     function completeTask(task: TaskInterface){
-        let taskIndex = skillState.tasks.indexOf(task);
-        let newTasks = skillState.tasks;
+        let taskIndex = skillState.skill_tasks.indexOf(task);
+        let newTasks = skillState.skill_tasks;
         newTasks[taskIndex] = task;
-        task.status = "completed";
-        setSkillState({...skillState, exp: skillState.exp + task.reward, tasks: newTasks });
+        task.task_status = "completed";
+        setSkillState({...skillState, skill_exp: skillState.skill_exp + task.task_exp, skill_tasks: newTasks });
         console.log(skillState)
     }
 
     function startTask(task: TaskInterface){
-        let taskIndex = skillState.tasks.indexOf(task);
-        let newTasks = skillState.tasks;
+        let taskIndex = skillState.skill_tasks.indexOf(task);
+        let newTasks = skillState.skill_tasks;
         newTasks[taskIndex] = task;
-        task.status = "in progress";
-        setSkillState({...skillState, tasks: newTasks });
+        task.task_status = "in progress";
+        setSkillState({...skillState, skill_tasks: newTasks });
         console.log(skillState)
     }
 
@@ -38,16 +38,16 @@ function SkillComponent({skill, viewTask=true}: {skill:SkillInterface, viewTask?
         currentXp: number;
         xpToNextLevel: number;
         progressPercentage: number;
-    } = getLevelProgress(skillState.exp);
+    } = getLevelProgress(skillState.skill_exp);
 
   return (
     <>
-        <h1>{skillState.name}</h1>
-        <h3>{skillState.type}</h3>
-        <h3>{skillState.url}</h3>
-        <h4>{skillState.id}</h4>
+        <h1>{skillState.skill_name}</h1>
+        <h3>{skillState.skill_type}</h3>
+        <h3>{skillState.skill_url}</h3>
+        <h4>{skillState.skill_id}</h4>
 
-        <h4>Experience: {skillState.exp}</h4>
+        <h4>Experience: {skillState.skill_exp}</h4>
         <p>
             Level: {levelProgress.level},
             currentXp: {levelProgress.currentXp},

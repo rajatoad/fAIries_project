@@ -11,8 +11,8 @@ function SkillComponent({skill, viewTask=true}: {skill:SkillInterface, viewTask?
 
     let [skillState, setSkillState] = useState<SkillInterface>(skill);
 
-    let tasksView = skill.skill_tasks.map((item: TaskInterface) => {
-                    return item.task_status === "completed" ? <></> : <TaskComponent task={item} completeTask={completeTask} startTask={startTask}/>
+    let tasksView = skill.skill_tasks.map((item: TaskInterface, index: number) => {
+                    return item.task_status === "completed" ? <></> : <TaskComponent key={index} task={item} completeTask={completeTask} startTask={startTask}/>
                 })
     
     function completeTask(task: TaskInterface){

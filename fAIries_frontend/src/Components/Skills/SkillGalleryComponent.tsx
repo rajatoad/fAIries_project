@@ -9,7 +9,7 @@ function SkillGalleryComponent({skills}: {skills: SkillInterface[]}) {
     <>
     {
         skillsState?.map((skill: SkillInterface) => {
-            return <SkillComponent skill={skill}/>
+            return <SkillComponent key={skill.skill_id} skill={skill}/>
         })
     }
     </>

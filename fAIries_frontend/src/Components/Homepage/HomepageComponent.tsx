@@ -10,25 +10,28 @@ import LoginComponent from '../Login/LoginComponent';
 interface UserData{
     username: string;
     user_id: string;
-    user_skills: SkillInterface[]; 
 }
 
 
 function HomepageComponent() {
 
   let [userData, setUserData] = useState<UserData | undefined>(undefined);
+  let [userSkills, setUserSkills] = useState<SkillInterface[] | undefined>(undefined);
 
-  // useEffect(() => {
-  //   let url = `http://localhost:3000/skills`;
-  //   axios.get(url).then((response) => setSkills(response.data));
-  // }, []);
+  useEffect(() => {
+    if(!userData) return;
+    let url = `http://localhost:3000/skills/${userData.user_id}`;
+    axios.get(url).then((response: {data: SkillInterface[]}) => {
+      setUserSkills(response.data);
+    });
+  }, [userData]);
 
   return (
     <>
         <h1>Welcome to the Homepage</h1>
-        { userData ? (
+        { userData && userSkills ? (
 
-          <><JournalComponent /><SkillGalleryComponent skills={userData.user_skills} /></>
+          <><JournalComponent /><SkillGalleryComponent skills={userSkills} /></>
 
         ): (
           <LoginComponent setUserData={setUserData}/>

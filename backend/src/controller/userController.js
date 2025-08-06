@@ -15,7 +15,6 @@ router.post('/login', async (req, res) => {
 
   try{
     const user = await userService.loginUser(username, password);
-    // console.log(user);
     if (!user) {
         return res.status(401).send('Invalid username or password');
     }else{
@@ -29,6 +28,7 @@ router.post('/login', async (req, res) => {
     return res.status(500).send('Internal server error');
   }
 });
+
 
 router.post('/register', (req, res) => {
   console.log('Registration request received');

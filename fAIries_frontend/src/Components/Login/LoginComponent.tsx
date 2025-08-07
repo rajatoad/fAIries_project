@@ -1,7 +1,11 @@
 import axios from 'axios';
 import React from 'react'
+import { UserContext } from '../../Context/UserContext';
 
-function LoginComponent({setUserData}: {setUserData: any}) {
+function LoginComponent() {
+
+    const userContext = React.useContext(UserContext);
+    const setUserData = userContext?.setUserData;
 
     let [loginInfo, setLoginInfo] = React.useState({
         username: '',
@@ -12,7 +16,9 @@ function LoginComponent({setUserData}: {setUserData: any}) {
         let url = `http://localhost:3000/users/login`;
         axios.post(url, loginInfo).then((response) => {
             console.log('Login successful:', response.data);
-            setUserData(response.data);
+            if (setUserData) {
+                setUserData(response.data);
+            }
             // Handle successful login (e.g., redirect, store token, etc.)
         }).catch((error) => {
             console.error('Error logging in:', error);

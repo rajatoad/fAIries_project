@@ -1,5 +1,4 @@
 
-const { get } = require('../controller/userController');
 const userDAO = require('../repository/userDAO');
 const skillService = require('./skillService');
 

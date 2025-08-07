@@ -5,12 +5,14 @@ const port = 3000;
 
 const userController = require('./controller/userController');
 const skillController = require('./controller/skillController');
+const journalController = require('./controller/journalController');
 
 app.use(cors());
 app.use(express.json());
 
 app.use('/users', userController);
 app.use('/skills', skillController);
+app.use('/journals', journalController);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

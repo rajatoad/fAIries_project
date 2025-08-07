@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import JournalComponent from '../Journal/JournalComponent'
+import React, { useContext, useEffect, useState } from 'react'
+import JournalComponent from '../Journal/JournalEntryComponent'
 import SkillGalleryComponent from '../Skills/SkillGalleryComponent'
 import dummySkills from '../../Testing/DummyData'
 import type { SkillInterface } from '../Skills/SkillInterface';
 import axios from 'axios';
 import LoginComponent from '../Login/LoginComponent';
+import { UserContext } from '../../Context/UserContext';
 
 
 interface UserData{
@@ -15,8 +16,11 @@ interface UserData{
 
 function HomepageComponent() {
 
-  let [userData, setUserData] = useState<UserData | undefined>(undefined);
+  const userContext = useContext(UserContext);
+  const userData = userContext?.userData;
+
   let [userSkills, setUserSkills] = useState<SkillInterface[] | undefined>(undefined);
+
 
   useEffect(() => {
     if(!userData) return;
@@ -34,7 +38,7 @@ function HomepageComponent() {
           <><JournalComponent /><SkillGalleryComponent skills={userSkills} /></>
 
         ): (
-          <LoginComponent setUserData={setUserData}/>
+          <LoginComponent/>
         )}
     </>
   )

@@ -7,6 +7,7 @@ import dummySkills from './Testing/DummyData'
 import JournalComponent from './Components/Journal/JournalEntryComponent'
 import HomepageComponent from './Components/Homepage/HomepageComponent'
 import { UserProvider } from './Context/UserContext'
+import SkillManagerComponent from './Components/Skills/SkillManager/SkillManagerComponent'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
     <>
     <UserProvider>
       <HomepageComponent/>
+      {/* <SkillManagerComponent/> */}
     </UserProvider>
     </>
   )

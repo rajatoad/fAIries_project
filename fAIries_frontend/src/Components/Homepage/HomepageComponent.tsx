@@ -6,6 +6,8 @@ import type { SkillInterface } from '../Skills/SkillInterface';
 import axios from 'axios';
 import LoginComponent from '../Login/LoginComponent';
 import { UserContext } from '../../Context/UserContext';
+import RegisterComponent from '../Register/RegisterComponent';
+import SkillManagerComponent from '../Skills/SkillManager/SkillManagerComponent';
 
 
 interface UserData{
@@ -19,26 +21,21 @@ function HomepageComponent() {
   const userContext = useContext(UserContext);
   const userData = userContext?.userData;
 
-  let [userSkills, setUserSkills] = useState<SkillInterface[] | undefined>(undefined);
-
-
-  useEffect(() => {
-    if(!userData) return;
-    let url = `http://localhost:3000/skills/${userData.user_id}`;
-    axios.get(url).then((response: {data: SkillInterface[]}) => {
-      setUserSkills(response.data);
-    });
-  }, [userData]);
-
   return (
     <>
         <h1>Welcome to the Homepage</h1>
-        { userData && userSkills ? (
+        { userData ? (
 
-          <><JournalComponent /><SkillGalleryComponent skills={userSkills} /></>
+          <>
+            <JournalComponent />
+            <SkillManagerComponent />
+          </>
 
         ): (
-          <LoginComponent/>
+          <>
+            <LoginComponent/>
+            <RegisterComponent/>
+          </>
         )}
     </>
   )

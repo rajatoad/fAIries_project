@@ -14,7 +14,22 @@ const documentClient = DynamoDBDocumentClient.from(client);
 
 const TableName = "UsersTable";
 
+// CREATE
+async function createItem(item) {
+  const command = new PutCommand({
+    TableName,
+    Item: item,
+  });
+    try {
+    const data = await documentClient.send(command);
+    return data;
+  } catch (error) {
+    console.error("Unable to add item. Error:", JSON.stringify(error, null, 1));
+    return null;
+  } 
+}
 
+// READ
 // Find user by username and password (not partition key)
 async function findUserByUsernameAndPassword(username, password) {
   console.log(`Finding user with username: ${username} and password: ${password}`);
@@ -29,11 +44,11 @@ async function findUserByUsernameAndPassword(username, password) {
       ":username": username,
       ":password": password,
     },
-    Limit: 1, // Only need one match
   });
 
   try {
     const data = await documentClient.send(command);
+    console.log(data);
     return data.Items && data.Items.length > 0 ? data.Items[0] : null;
   } catch (err) {
     console.error(`Unable to scan for user. Error: ${err}`);
@@ -57,23 +72,38 @@ async function getItem(key) {
     return null;
 }
 
-async function createItem(item) {
-  const command = new PutCommand({
+
+// UPDATE
+async function updateItem(user){
+  const command = new UpdateCommand({
     TableName,
-    Item: item,
+    Key: { user_id: user.user_id },
+    UpdateExpression: "set #user_skills = :user_skills",
+    ExpressionAttributeNames: {
+      "#user_skills": "user_skills",
+    },
+    ExpressionAttributeValues: {
+      ":user_skills": user.user_skills,
+    },
   });
-    try {
+  try {
     const data = await documentClient.send(command);
     return data;
   } catch (error) {
-    console.error("Unable to add item. Error:", JSON.stringify(error, null, 1));
+    console.error("Unable to update item. Error:", JSON.stringify(error, null, 1));
     return null;
-  } 
+  }
 }
+
+
+
+// DELETE
+
 
 
 module.exports = {
   getItem,
   createItem,
   findUserByUsernameAndPassword, 
+  updateItem,
 };

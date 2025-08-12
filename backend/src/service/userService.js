@@ -1,5 +1,6 @@
-
+const uuid = require('uuid');
 const userDAO = require('../repository/userDAO');
+const skillDAO = require('../repository/skillDAO');
 const skillService = require('./skillService');
 
 
@@ -31,7 +32,7 @@ async function getUserSkills(userId){
                     };
                 }
         }
-        return user.user_skills;;
+        return user.user_skills;
         }}catch(error) {
         console.error(`Error transforming user skills: ${error}`);
         return null;
@@ -53,9 +54,17 @@ async function getUserById(userId) {
     }
 }
 
-function createItem(item) {
+async function createUser(user) {
     try{
-        userDAO.createItem(item);
+        const transformedUser = {
+            username: user.username,
+            password: user.password,
+            user_id: uuid.v4(),
+            user_skills: []
+        }
+
+        userDAO.createItem(transformedUser);
+        return transformedUser;
     }catch(error) {
         console.error("Error creating item:", error);
         throw error;
@@ -63,9 +72,25 @@ function createItem(item) {
 
 }
 
+
+async function addSkillToUser(userId, skillId) {
+    try{
+        const skill = await skillDAO.getItem({ skill_id: skillId });
+        const user = await getUserById(userId);
+
+        user.user_skills.push({skill_exp: 0, skill_id: skill.skill_id, skill_tasks: []});
+        await userDAO.updateItem(user);
+        return user;
+    }catch(error){
+        console.error(`Error adding skill to user: ${error}`);
+        throw error;
+    }
+}
+
 module.exports = {
   loginUser,
-  createItem,
+  createUser,
   getUserById,
-  getUserSkills
+  getUserSkills,
+  addSkillToUser
 };

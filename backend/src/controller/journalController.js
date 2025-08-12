@@ -3,9 +3,8 @@ const router = express.Router();
 
 const journalService = require('../service/journalService');
 
-router.put('/:journalId/entry', async (req, res) => {
-    const journal_id = req.params.journalId;
-    const {title, content} = req.body;
+router.put('/entry', async (req, res) => {
+    const {title, content, journal_id} = req.body;
 
     try{
         await journalService.createJournalEntry(journal_id, title, content)
@@ -22,7 +21,8 @@ router.get('/:userId', async (req, res) => {
     try {
         const journal = await journalService.getJournalByUserId(userId);
         if (!journal) {
-            return res.status(404).send('Journal not found');
+            const newJournal = await journalService.createJournal({ user_id: userId });
+            return res.status(201).json(newJournal);
         }
         res.status(200).json(journal);
     } catch (error) {

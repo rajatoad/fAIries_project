@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const skillDao = require('../repository/skillDAO');
 
 async function getSkillById(skillId) {
@@ -6,7 +7,6 @@ async function getSkillById(skillId) {
     if (!skill) {
       return null;
     }
-    console.log(skill)
     return skill;
   } catch (error) {
     console.error(`Error fetching skill by ID: ${error}`);
@@ -16,8 +16,12 @@ async function getSkillById(skillId) {
 
 async function createSkill(skill) {
   try {
+    skill = {
+      ...skill,
+      skill_id: uuid.v4(),
+    }
     const result = await skillDao.createItem(skill);
-    return result;
+    return skill;
   } catch (error) {
     console.error(`Error creating skill: ${error}`);
     throw error;

@@ -46,7 +46,6 @@ async function getItemsByUserId(userId) {
   });
 
   try {
-    console.log(userId);
     const data = await documentClient.send(command);
     return data.Items[0];
   } catch (err) {

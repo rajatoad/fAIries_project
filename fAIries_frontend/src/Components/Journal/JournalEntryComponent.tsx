@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import type { JournalEntryInterface } from './JournalInterface';
 import { UserContext } from '../../Context/UserContext';
 
@@ -9,11 +9,26 @@ function JournalComponent() {
     const userContext = useContext(UserContext);
     const userData = userContext?.userData;
 
-    let url = `http://localhost:3000/journals/`;
+
+    // let url = `http://localhost:3000/journals/`;
     let [journalState, setJournalState] = useState<JournalEntryInterface>({
         title: '',
-        content: ''
+        content: '',
+        journal_id: undefined,
     });
+
+    useEffect(() => {
+      if(journalState.journal_id) return;
+      axios.get(`http://localhost:3000/journals/${userData?.user_id}`)
+        .then((checkJournalResponse) => { 
+              setJournalState({...journalState, journal_id: checkJournalResponse.data.journal_id});
+          }
+        )
+        .catch((error) => {
+          console.error('Error checking journal:', error);
+          // Handle error (e.g., show error message)
+        });
+    }, []);
 
     function handleInputChange(event: any){
         setJournalState({
@@ -30,27 +45,11 @@ function JournalComponent() {
 
     async function submitJournal() {
         try {
-
-          if(!userData?.journal_id){
-            try{
-              const createJournalResponse = await axios.post(`http://localhost:3000/journals`, {user_id: userData?.user_id});
-              if(userContext?.setUserData){
-                userContext.setUserData({
-                  user_id: userData?.user_id ?? '',
-                  username: userData?.username ?? '',
-                  journal_id: createJournalResponse.data.journal_id
-                });
-              }
-            }catch(error){
-              console.error('Error creating journal:', error);
-              return;
-            }
-          }
-          
-          const response = await axios.post(url, journalState);
-            
+          console.log(journalState);
+          const response = await axios.put(`http://localhost:3000/journals/entry`, journalState);
             // Optionally, reset the journal state after submission
             setJournalState({
+                ...journalState,
                 title: '',
                 content: ''
             });

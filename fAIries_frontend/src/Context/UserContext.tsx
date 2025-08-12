@@ -3,7 +3,6 @@ import React, { createContext, useState } from 'react';
 export interface UserData {
   username: string;
   user_id: string;
-  journal_id?: string;
 }
 
 interface UserContextType {

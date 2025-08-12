@@ -1,4 +1,10 @@
+const { v4: uuidv4 } = require('uuid');
+// const { GoogleGenAi} = require('@google/genai');
 const journalDao = require('../repository/journalDAO');
+
+// const ai = new GoogleGenAI({
+//     apiKey: process.env.GOOGLE_GENAI_API_KEY,
+// })
 
 async function getJournalById(journalId) {
     try {
@@ -54,6 +60,8 @@ async function createJournalEntry(journal_id, title, content) {
             throw new Error('Journal not found');
         }
 
+
+
         existingJournal.entries.push({ title, raw_input: content, processed_input: "", date: new Date().toISOString() });
         return await journalDao.updateItem(existingJournal);
     } catch (error) {
@@ -62,6 +70,15 @@ async function createJournalEntry(journal_id, title, content) {
     }
 }
 
+async function processJournalEntry(entry) {
+
+    const response = await ai.models.generateContent({
+        model: "gemma-3-12b-it",
+        contents: entry
+    })
+
+    return response;
+}
 
 module.exports = {
     getJournalById,
